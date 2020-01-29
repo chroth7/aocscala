@@ -4,6 +4,7 @@ package aocscala
 import Day1._
 import Day2._
 import Day3._
+import Day4._
 
 object Main extends App {
   def divider() =  println("-" * 10)
@@ -24,4 +25,9 @@ object Main extends App {
   println("Day3_2: " + day3_2(wire1Input, wire2Input))
 
   divider()
+
+  println("Day4_1: " + day4_1(402328, 864247))
+  println("Day4_2: " + day4_2(402328, 864247))
+
 }
+
