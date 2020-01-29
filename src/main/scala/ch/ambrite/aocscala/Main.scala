@@ -2,7 +2,6 @@ package ch.ambrite
 package aocscala
 
 import Day1._
-
 import Day2._
 
 object Main extends App {
