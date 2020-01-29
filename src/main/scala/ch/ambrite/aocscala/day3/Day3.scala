@@ -40,7 +40,7 @@ object Day3 {
 
   def findBestIntersectionDistance(wire1: Wire, wire2: Wire): Int = {
     val allIntersections: Seq[(Int, Int)] = wire1.init intersect wire2.init
-    val distances: Seq[Int] = allIntersections map (intersection => intersection._1.abs + intersection._2.abs)
+    val distances: Seq[Int] = allIntersections map ({ case (x, y) => x.abs + y.abs })
     
     distances min
   }
