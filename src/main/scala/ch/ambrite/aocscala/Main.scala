@@ -13,6 +13,8 @@ object Main extends App {
 
   println("─" * 10)
 
-  println("Day2_1: " + day2_1(input_day2_1_updated))
+  println("Day2_1: " + day2_1(input_day2_1))
+
+  println("Day2_2: " + day2_2())
 
 }
