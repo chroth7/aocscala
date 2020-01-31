@@ -16,45 +16,87 @@ object Day5 {
     Opmode(getDigit(0) + getDigit(1) * 10,makeBoolFromDigit(2),makeBoolFromDigit(3),makeBoolFromDigit(4))
   }
 
-  def processOp(list: Seq[Int], shift: Int, p1: Boolean, p2: Boolean, p3: Boolean, index: Int, func: (Int, Int) => Int): Int = {
-    val param1 = if (p1) list(index + 1) else list(list(index + 1))
-    val param2 = if (p2) list(index + 2) else list(list(index + 2))
+  def getValueWithMode(seq: Seq[Int], index: Int, mode: Boolean): Int = {
+    if (mode)
+      seq(index)
+    else
+      seq(seq(index))
+  }
+
+  def processOp(seq: Seq[Int], input: Int, shift: Int, p1: Boolean, p2: Boolean, p3: Boolean, index: Int, func: (Int, Int) => Int): Int = {
+    if (p3) println(p3)
+
+    val param1 = getValueWithMode(seq, index + 1, p1)
+    val param2 = getValueWithMode(seq, index + 2, p2)
     // Pos is always immediate
-    val pos = if (p3) list(index + 3) else list(index + 3)
+    val pos = seq(index + 3)
+
     val calc = func(param1, param2)
-    val newSeq = list.updated(pos, calc)
-    processAdvancedOps(newSeq, index + shift)
+    val newSeq = seq.updated(pos, calc)
+    processAdvancedOps(newSeq, index + shift, input)
   }
 
-  def processInput(list: Seq[Int], input: Int, shift: Int, index: Int): Int = {
-    val pos = list(index + 1)
-    val newSeq = list.updated(pos, input)
-    processAdvancedOps(newSeq, index + shift)
+  def processInput(seq: Seq[Int], input: Int, shift: Int, index: Int): Int = {
+    val pos = seq(index + 1)
+    val newSeq = seq.updated(pos, input)
+    processAdvancedOps(newSeq, index + shift, input)
   }
 
-  def processOutput(list: Seq[Int], shift: Int, p1: Boolean, index: Int): Int = {
-    val pos = list(index + 1)
-    val output = if (p1) pos else list(pos)
-    if (output == 0) processAdvancedOps(list, index + shift) else output
+  def processOutput(seq: Seq[Int], input: Int, shift: Int, p1: Boolean, index: Int): Int = {
+    val pos = seq(index + 1)
+    val output = if (p1) pos else seq(pos)
+    if (output == 0) processAdvancedOps(seq, index + shift, input) else output
+  }
+  
+  def processJump(seq: Seq[Int], input: Int, predicate: Int => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): Int = {
+    val checkAgainst: Int = getValueWithMode(seq, index + 1, p1)
+    val condition = predicate(checkAgainst)
+    if (condition) 
+      processAdvancedOps(seq, getValueWithMode(seq, index + 2, p2), input) 
+    else 
+      processAdvancedOps(seq, index + shift, input) 
   }
 
-  def processAdvancedOps(list: Seq[Int], index: Int): Int = {
-    if (list(index) != 99 && index > list.length - 3) -1 else {
-      val op = list(index)
+  def processSetAtPosition(seq: Seq[Int], input: Int, predicate: (Int, Int) => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): Int = {
+    val param1: Int = getValueWithMode(seq, index + 1, p1)
+    val param2: Int = getValueWithMode(seq, index + 2, p2)
+    val pos = seq(index + 3)
+
+    val condition = predicate(param1, param2)
+    val value = if (condition) 
+      1
+    else {
+      0
+    }
+    val newSeq = seq.updated(pos, value)
+    processAdvancedOps(newSeq, index + shift, input) 
+  }
+
+  def processAdvancedOps(seq: Seq[Int], index: Int, input: Int): Int = {
+    if (seq(index) != 99 && index > seq.length - 3) -1 else {
+      val op = seq(index)
       val Opmode(code, p1, p2, p3) = getOpmode(op)
       code match {
-        case 1 => processOp(list, 4, p1, p2, p3, index, _ + _)
-        case 2 => processOp(list, 4, p1, p2, p3, index, _ * _)
-        case 3 => processInput(list, 1, 2, index)
-        case 4 => processOutput(list, 2, p1, index)
-        case 99 => list.head
+        case 1 => processOp(seq, input, 4, p1, p2, p3, index, _ + _)
+        case 2 => processOp(seq, input, 4, p1, p2, p3, index, _ * _)
+        case 3 => processInput(seq, input, 2, index)
+        case 4 => processOutput(seq, input,  2, p1, index)
+        case 5 => processJump(seq, input, _ != 0,  3, p1, p2, index)
+        case 6 => processJump(seq, input, _ == 0,  3, p1, p2, index)
+        case 7 => processSetAtPosition(seq, input,  _ < _,  4, p1, p2, index)
+        case 8 => processSetAtPosition(seq, input, _ == _,  4, p1, p2, index)
+        case 99 => seq.head
         case _ => -2
       }
     }
   }
 
   def day5_1(): Int = {
-    processAdvancedOps(input_day5_1, 0)
+    processAdvancedOps(input_day5_1, 0, 1)
+  }
+
+  def day5_2(): Int = {
+    processAdvancedOps(input_day5_1, 0, 5)
   }
 
 
