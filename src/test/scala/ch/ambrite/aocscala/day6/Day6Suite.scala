@@ -26,16 +26,17 @@ K)L"""
     splitOrbit("A)B") shouldBe ("A", "B")
     oneInstruction.size shouldBe 1
     twoInstructions.size shouldBe 2
-    twoInstructions("B") shouldBe 1
-    twoInstructions("C") shouldBe 2
+    twoInstructions("B").length shouldBe 1
+    twoInstructions("C").length shouldBe 2
+    twoInstructions("C") shouldBe List("B", "A")
 
     countOrbits(emptyHM) shouldBe 0
     countOrbits(oneInstruction) shouldBe 1
     countOrbits(twoInstructions) shouldBe 3
 
     val fullMap = buildFullMap(sortInput(formatInput(testInput1)))
-    fullMap("D") shouldBe 3
-    fullMap("L") shouldBe 7
+    fullMap("D").length shouldBe 3
+    fullMap("L").length shouldBe 7
 
     countOrbits(computeOrbitMap(testInput1)) shouldBe 42
   }

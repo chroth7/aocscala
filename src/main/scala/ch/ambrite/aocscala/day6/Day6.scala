@@ -11,7 +11,7 @@ import scala.io.Source
 object Day6 {
   type Orbit = (String, String)
   type Orbits = List[Orbit]
-  type OrbitMap = HashMap[String, Int]
+  type OrbitMap = HashMap[String, List[String]]
 
   def formatInput(raw: String): Orbits = raw.linesIterator.toList.map(splitOrbit)
 
@@ -38,11 +38,12 @@ object Day6 {
   
   def buildHashmap(hm: OrbitMap, orbit: Orbit): OrbitMap = {
     val (k, v) = orbit
-    val parentOrbits: Int = if (hm.contains(k)) hm(k) else 0
-    hm + (v -> (parentOrbits + 1))
+    val emptyList: List[String] = List()
+    val parentOrbits: List[String] = if (hm.contains(k)) hm(k) else emptyList
+    hm + (v -> (k :: parentOrbits))
   }
 
-  def countOrbits(hm: OrbitMap): Int = hm.values.foldLeft(0) { _+_ }
+  def countOrbits(hm: OrbitMap): Int = hm.values.foldLeft(0) { _ + _.length }
 
   def buildFullMap(singleInstructions: Orbits): OrbitMap = {
     val emptyMap: OrbitMap = new HashMap()
