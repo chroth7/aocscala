@@ -11,6 +11,7 @@ import scala.io.Source
 object Day6 {
   type Orbit = (String, String)
   type Orbits = List[Orbit]
+  type OrbitMap = HashMap[String, Int]
 
   def formatInput(raw: String): Orbits = raw.linesIterator.toList.map(splitOrbit)
 
@@ -35,29 +36,36 @@ object Day6 {
     (split(0), split(1))
   }
   
-  def buildHashmap(hm: HashMap[String, Int], orbit: Orbit): HashMap[String, Int] = {
+  def buildHashmap(hm: OrbitMap, orbit: Orbit): OrbitMap = {
     val (k, v) = orbit
     val parentOrbits: Int = if (hm.contains(k)) hm(k) else 0
     hm + (v -> (parentOrbits + 1))
   }
 
-  def countOrbits(hm: HashMap[String, Int]): Int = hm.values.foldLeft(0) { _+_ }
+  def countOrbits(hm: OrbitMap): Int = hm.values.foldLeft(0) { _+_ }
 
-  def buildFullMap(singleInstructions: Orbits): HashMap[String, Int] = {
-    val emptyMap: HashMap[String, Int] = new HashMap()
+  def buildFullMap(singleInstructions: Orbits): OrbitMap = {
+    val emptyMap: OrbitMap = new HashMap()
     singleInstructions.foldLeft(emptyMap){ (a, v) => buildHashmap(a, v) }
   }
 
-  def computeInstructions(allInstructions: String): Int = {
+  def computeOrbitMap(allInstructions: String): OrbitMap = {
     val unsortedInstructions = formatInput(allInstructions)
     val sortedInstructions = sortInput(unsortedInstructions)
     // val unsortedOrbits: List[(String, String)] = unsortedInstructions.map(splitOrbit)
-    val finalMap = buildFullMap(sortedInstructions)
-    countOrbits(finalMap)
+    buildFullMap(sortedInstructions)
   }
+
 
   def day6_1(): Int = {
     val source = Source.fromFile("inputs/inputDay6.txt").mkString
-    computeInstructions(source)
+    val orbitMap = computeOrbitMap(source)
+    countOrbits(orbitMap)
+  }
+
+  def day7_1(): Int = {
+    val source = Source.fromFile("inputs/inputDay6.txt").mkString
+    val orbitMap = computeOrbitMap(source)
+    orbitMap.size
   }
 }

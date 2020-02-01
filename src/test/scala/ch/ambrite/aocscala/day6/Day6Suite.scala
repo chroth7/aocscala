@@ -18,7 +18,7 @@ E)J
 K)L"""
 
   test("Orbits!") {
-    val emptyHM: HashMap[String, Int] = new HashMap()
+    val emptyHM: OrbitMap = new HashMap()
     val oneInstruction = buildHashmap(emptyHM, formatInput("A)B")(0))
     val twoInstructions = buildHashmap(oneInstruction, formatInput("B)C")(0))
 
@@ -37,7 +37,7 @@ K)L"""
     fullMap("D") shouldBe 3
     fullMap("L") shouldBe 7
 
-    computeInstructions(testInput1) shouldBe 42
+    countOrbits(computeOrbitMap(testInput1)) shouldBe 42
   }
 
 }
