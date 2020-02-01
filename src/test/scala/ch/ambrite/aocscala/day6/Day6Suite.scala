@@ -7,14 +7,14 @@ import scala.collection.immutable.HashMap
 class Day6Suite extends TestSuite {
   val testInput1 = """COM)B
 B)C
-C)D
 D)E
-E)F
 B)G
+E)F
+J)K
 G)H
+C)D
 D)I
 E)J
-J)K
 K)L"""
 
   test("Orbits!") {
@@ -33,7 +33,7 @@ K)L"""
     countOrbits(oneInstruction) shouldBe 1
     countOrbits(twoInstructions) shouldBe 3
 
-    val fullMap = buildFullMap(formatInput(testInput1))
+    val fullMap = buildFullMap(sortInput(formatInput(testInput1)))
     fullMap("D") shouldBe 3
     fullMap("L") shouldBe 7
 
