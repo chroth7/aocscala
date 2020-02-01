@@ -6,6 +6,7 @@ import Day2._
 import Day3._
 import Day4._
 import Day5._
+import Day6._
 
 object Main extends App {
   def divider() =  println("-" * 10)
@@ -36,5 +37,7 @@ object Main extends App {
   println("Day5_2: " + day5_2())
 
   divider()
+
+  println("Day6_1: " + day6_1())
 }
 
