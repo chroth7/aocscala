@@ -52,7 +52,6 @@ object Day6 {
   def computeOrbitMap(allInstructions: String): OrbitMap = {
     val unsortedInstructions = formatInput(allInstructions)
     val sortedInstructions = sortInput(unsortedInstructions)
-    // val unsortedOrbits: List[(String, String)] = unsortedInstructions.map(splitOrbit)
     buildFullMap(sortedInstructions)
   }
 
@@ -63,7 +62,7 @@ object Day6 {
     countOrbits(orbitMap)
   }
 
-  def day7_1(): Int = {
+  def day6_2(): Int = {
     val source = Source.fromFile("inputs/inputDay6.txt").mkString
     val orbitMap = computeOrbitMap(source)
     orbitMap.size
