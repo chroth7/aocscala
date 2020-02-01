@@ -63,9 +63,17 @@ object Day6 {
     countOrbits(orbitMap)
   }
 
+  def findDistanceInOrbits(orbitMap: OrbitMap, start: String, end: String): Int = {
+    val myOrbits = orbitMap(start).reverse
+    val santasOrbits = orbitMap(end).reverse
+
+
+    (myOrbits.diff(santasOrbits) ::: santasOrbits.diff(myOrbits)).size
+  }
+
   def day6_2(): Int = {
     val source = Source.fromFile("inputs/inputDay6.txt").mkString
     val orbitMap = computeOrbitMap(source)
-    orbitMap.size
+    findDistanceInOrbits(orbitMap, "YOU", "SAN")
   }
 }
