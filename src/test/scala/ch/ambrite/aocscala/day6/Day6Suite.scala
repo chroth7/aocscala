@@ -19,8 +19,8 @@ K)L"""
 
   test("Orbits!") {
     val emptyHM: HashMap[String, Int] = new HashMap()
-    val oneInstruction = buildHashmap(emptyHM, "A)B")
-    val twoInstructions = buildHashmap(oneInstruction, "B)C")
+    val oneInstruction = buildHashmap(emptyHM, formatInput("A)B")(0))
+    val twoInstructions = buildHashmap(oneInstruction, formatInput("B)C")(0))
 
     formatInput(testInput1).size shouldBe 11
     splitOrbit("A)B") shouldBe ("A", "B")
