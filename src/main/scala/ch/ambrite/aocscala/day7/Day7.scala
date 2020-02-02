@@ -9,6 +9,7 @@ case object Day7 {
   type OpProgram = Seq[Int]
   type Inputs = Seq[Int]
   type Phases = Seq[Int]
+  type OpOutput = (Int, Int)
 
   val input_day7_1 = Seq(3,8,1001,8,10,8,105,1,0,0,21,34,51,68,89,98,179,260,341,422,99999,3,9,1001,9,4,9,102,4,9,9,4,9,99,3,9,1002,9,5,9,1001,9,2,9,1002,9,2,9,4,9,99,3,9,1001,9,3,9,102,3,9,9,101,4,9,9,4,9,99,3,9,102,2,9,9,101,2,9,9,1002,9,5,9,1001,9,2,9,4,9,99,3,9,102,2,9,9,4,9,99,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,99,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,2,9,4,9,99,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,99,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,2,9,9,4,9,3,9,101,2,9,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,99)
 
@@ -23,8 +24,8 @@ case object Day7 {
     Opmode(getDigit(0) + getDigit(1) * 10,makeBoolFromDigit(2),makeBoolFromDigit(3),makeBoolFromDigit(4))
   }
 
-  def processAdvancedOps(seq: OpProgram, index: Int, input: Inputs): Int = {
-    if (seq(index) != 99 && index > seq.length - 3) -1 else {
+  def processAdvancedOps(seq: OpProgram, index: Int, input: Inputs): OpOutput = {
+    if (seq(index) != 99 && index > seq.length - 3) (-1, -1) else {
       val op = seq(index)
       val Opmode(code, p1, p2, p3) = getOpmode(op)
       code match {
@@ -36,16 +37,17 @@ case object Day7 {
         case 6 => processJump(seq, input, _ == 0,  3, p1, p2, index)
         case 7 => processSetAtPosition(seq, input,  _ < _,  4, p1, p2, index)
         case 8 => processSetAtPosition(seq, input, _ == _,  4, p1, p2, index)
-        case 99 => seq.head
+        case 99 => (seq.head, -1)
         case opcode => {
           println("Error opCode: " + opcode)
-          -2
+          (-2, -2)
         }
       }
     }
   }
 
-  def sequencer(program: OpProgram, phases: Phases, prevOutput: Int): Int = {
+  def sequencer(program: OpProgram, phases: Phases, prev: OpOutput): Int = {
+    val (prevOutput, _) = prev
     if (phases.length > 0) {
       val output = processAdvancedOps(program, 0, Seq(phases.head, prevOutput))
       sequencer(program, phases.tail, output)
@@ -56,7 +58,7 @@ case object Day7 {
 
   def trialAndError(program: OpProgram): Int = {
     val permutations = (0 to 4).permutations
-    permutations.foldLeft(0) { (a, v) => Math.max(a, sequencer(program, v, 0)) }
+    permutations.foldLeft(0) { (a, v) => Math.max(a, sequencer(program, v, (0, 0))) }
   }
 
   def day7_1(): Int = {
@@ -64,7 +66,7 @@ case object Day7 {
   }
 
   def day7_2(): Int = {
-    processAdvancedOps(input_day7_1, 0, Seq(5))
+    0
   }
 
 

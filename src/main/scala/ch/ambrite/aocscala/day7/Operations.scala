@@ -6,8 +6,6 @@ package operations
 import core.Day7._
 
 case object Day7Operations {
-  type Inputs = Seq[Int]
-
   def getValueWithMode(seq: Seq[Int], index: Int, mode: Boolean): Int = {
     if (mode)
       seq(index)
@@ -15,7 +13,7 @@ case object Day7Operations {
       seq(seq(index))
   }
 
-  def processOp(seq: Seq[Int], input: Inputs, shift: Int, p1: Boolean, p2: Boolean, p3: Boolean, index: Int, func: (Int, Int) => Int): Int = {
+  def processOp(seq: Seq[Int], input: Inputs, shift: Int, p1: Boolean, p2: Boolean, p3: Boolean, index: Int, func: (Int, Int) => Int): OpOutput = {
     if (p3) println(p3)
 
     val param1 = getValueWithMode(seq, index + 1, p1)
@@ -28,19 +26,19 @@ case object Day7Operations {
     processAdvancedOps(newSeq, index + shift, input)
   }
 
-  def processInput(seq: Seq[Int], input: Inputs, shift: Int, index: Int): Int = {
+  def processInput(seq: Seq[Int], input: Inputs, shift: Int, index: Int): OpOutput = {
     val pos = seq(index + 1)
     val newSeq = seq.updated(pos, input.head)
     processAdvancedOps(newSeq, index + shift, input.tail)
   }
 
-  def processOutput(seq: Seq[Int], input: Inputs, shift: Int, p1: Boolean, index: Int): Int = {
+  def processOutput(seq: Seq[Int], input: Inputs, shift: Int, p1: Boolean, index: Int): OpOutput = {
     val pos = seq(index + 1)
     val output = if (p1) pos else seq(pos)
-    if (output == 0) processAdvancedOps(seq, index + shift, input) else output
+    if (output == 0) processAdvancedOps(seq, index + shift, input) else (output, index + shift)
   }
   
-  def processJump(seq: Seq[Int], input: Inputs, predicate: Int => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): Int = {
+  def processJump(seq: Seq[Int], input: Inputs, predicate: Int => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): OpOutput = {
     val checkAgainst: Int = getValueWithMode(seq, index + 1, p1)
     val condition = predicate(checkAgainst)
     if (condition) 
@@ -49,7 +47,7 @@ case object Day7Operations {
       processAdvancedOps(seq, index + shift, input) 
   }
 
-  def processSetAtPosition(seq: Seq[Int], input: Inputs, predicate: (Int, Int) => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): Int = {
+  def processSetAtPosition(seq: Seq[Int], input: Inputs, predicate: (Int, Int) => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): OpOutput = {
     val param1: Int = getValueWithMode(seq, index + 1, p1)
     val param2: Int = getValueWithMode(seq, index + 2, p2)
     val pos = seq(index + 3)
