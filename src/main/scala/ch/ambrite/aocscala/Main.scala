@@ -45,5 +45,8 @@ object Main extends App {
   divider()
 
   println("Day7_1: " + day7_1())
+  println("Day7_2: " + day7_2())
+
+  divider()
 }
 

@@ -32,10 +32,11 @@ case object Day7Operations {
     processAdvancedOps(newSeq, index + shift, input.tail)
   }
 
-  def processOutput(seq: Seq[Int], input: Inputs, shift: Int, p1: Boolean, index: Int): OpOutput = {
+  def processOutput(seq: Seq[Int], shift: Int, p1: Boolean, index: Int): OpOutput = {
     val pos = seq(index + 1)
     val output = if (p1) pos else seq(pos)
-    if (output == 0) processAdvancedOps(seq, index + shift, input) else (output, index + shift)
+    // if (output == 0) processAdvancedOps(seq, index + shift, input) else (output, index + shift)
+    (output, index + shift, seq)
   }
   
   def processJump(seq: Seq[Int], input: Inputs, predicate: Int => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): OpOutput = {
