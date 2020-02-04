@@ -43,6 +43,6 @@ object Day8 {
 
   def day8_2(): String = {
     val input = Source.fromFile("inputs/inputDay8.txt").mkString.trim
-    finalColors(input, 25 * 6)
+    finalColors(input, 25 * 6).grouped(25).toList.mkString("\n").replace("1", "X").replace("0"," ")
   }
 }
