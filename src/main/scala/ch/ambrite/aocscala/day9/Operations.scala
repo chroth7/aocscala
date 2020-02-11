@@ -4,6 +4,7 @@ package day9
 package operations
 
 import core.Day9._
+import program._
 
 case object Day9Operations {
   def getValueWithMode(seq: Seq[Int], index: Int, mode: Boolean): Int = {
@@ -13,42 +14,44 @@ case object Day9Operations {
       seq(seq(index))
   }
 
-  def processOp(seq: Seq[Int], input: Inputs, shift: Int, p1: Boolean, p2: Boolean, p3: Boolean, index: Int, func: (Int, Int) => Int): OpOutput = {
-    if (p3) println(p3)
+  def processOp(intProgram: IntProgram, opmode: Opmode, shift: Int, func: (Int, Int) => Int): IntProgram = {
+    val Opmode(_, p1, p2, _) = opmode;
+    val IntProgram(_, seq, index, input) = intProgram
 
     val param1 = getValueWithMode(seq, index + 1, p1)
     val param2 = getValueWithMode(seq, index + 2, p2)
-    // Pos is always immediate
     val pos = seq(index + 3)
 
     val calc = func(param1, param2)
     val newSeq = seq.updated(pos, calc)
-    processAdvancedOps(newSeq, index + shift, input)
+    IntProgram(0, newSeq, index + shift, input).processAdvancedOps()
   }
 
-  def processInput(seq: Seq[Int], input: Inputs, shift: Int, index: Int): OpOutput = {
+  def processInput(intProgram: IntProgram, shift: Int): IntProgram = {
+    val IntProgram(_, seq, index, input) = intProgram
     val pos = seq(index + 1)
     val newSeq = seq.updated(pos, input.head)
-    processAdvancedOps(newSeq, index + shift, input.tail)
+    IntProgram(0, newSeq, index + shift, input).processAdvancedOps()
   }
 
-  def processOutput(seq: Seq[Int], shift: Int, p1: Boolean, index: Int): OpOutput = {
+  def processOutput(intProgram: IntProgram, opmode: Opmode, shift: Int): IntProgram = {
+    val IntProgram(_, seq, index, input) = intProgram
+    val Opmode(_, p1, _, _) = opmode
     val pos = seq(index + 1)
     val output = if (p1) pos else seq(pos)
-    // if (output == 0) processAdvancedOps(seq, index + shift, input) else (output, index + shift)
-    (output, index + shift, seq)
+    IntProgram(output, seq, index + shift, input)
   }
   
-  def processJump(seq: Seq[Int], input: Inputs, predicate: Int => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): OpOutput = {
+  def processJump(seq: Seq[Int], input: Inputs, predicate: Int => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): IntProgram = {
     val checkAgainst: Int = getValueWithMode(seq, index + 1, p1)
     val condition = predicate(checkAgainst)
     if (condition) 
-      processAdvancedOps(seq, getValueWithMode(seq, index + 2, p2), input) 
+      IntProgram(0, seq, getValueWithMode(seq, index + 2, p2), input).processAdvancedOps()
     else 
-      processAdvancedOps(seq, index + shift, input) 
+      IntProgram(0, seq, index + shift, input).processAdvancedOps()
   }
 
-  def processSetAtPosition(seq: Seq[Int], input: Inputs, predicate: (Int, Int) => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): OpOutput = {
+  def processSetAtPosition(seq: Seq[Int], input: Inputs, predicate: (Int, Int) => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): IntProgram = {
     val param1: Int = getValueWithMode(seq, index + 1, p1)
     val param2: Int = getValueWithMode(seq, index + 2, p2)
     val pos = seq(index + 3)
@@ -60,7 +63,7 @@ case object Day9Operations {
       0
     }
     val newSeq = seq.updated(pos, value)
-    processAdvancedOps(newSeq, index + shift, input) 
+    IntProgram(0, newSeq, index + shift, input).processAdvancedOps()
   }
 
 }
