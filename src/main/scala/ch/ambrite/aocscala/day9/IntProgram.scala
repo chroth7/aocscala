@@ -27,7 +27,7 @@ case class IntProgram(output: Output, program: OpProgram, index: Index, inputs: 
         case 6 => processJump(seq, input, _ == 0,  3, p1, p2, index)
         case 7 => processSetAtPosition(seq, input,  _ < _,  4, p1, p2, index)
         case 8 => processSetAtPosition(seq, input, _ == _,  4, p1, p2, index)
-        case 99 => IntProgram(seq.head, seq, index, input)
+        case 99 => IntProgram(seq.head, seq, -99, input)
         case opcode => {
           println("Error opCode: " + opcode)
           IntProgram(-2, seq, index, input)

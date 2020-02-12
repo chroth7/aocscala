@@ -31,7 +31,7 @@ case object Day9Operations {
     val IntProgram(_, seq, index, input) = intProgram
     val pos = seq(index + 1)
     val newSeq = seq.updated(pos, input.head)
-    IntProgram(0, newSeq, index + shift, input).processAdvancedOps()
+    IntProgram(0, newSeq, index + shift, input.tail).processAdvancedOps()
   }
 
   def processOutput(intProgram: IntProgram, opmode: Opmode, shift: Int): IntProgram = {

@@ -35,11 +35,12 @@ case object Day9 {
 
   var uhoh: Int = 0
   def statefulSequencer(programs: Seq[IntProgram], phases: Phases, thisTransformerIndex: Int): Int = {
-    val prevTransformerIndex = (thisTransformerIndex - 1) % programs.length
+    val prevTransformerIndex = (programs.length + thisTransformerIndex - 1) % programs.length
     val prev = programs(prevTransformerIndex)
     val IntProgram(prevOutput, _, _, _) = prev
-    if (uhoh > 10000000) {
+    if (uhoh > 10000) {
       // avoid infinite loops
+      println("OVERFLOW!")
       prevOutput
     } else {
       uhoh = uhoh + 1
