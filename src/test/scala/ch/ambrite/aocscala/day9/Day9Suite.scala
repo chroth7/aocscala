@@ -14,21 +14,51 @@ class Day9Suite extends TestSuite {
     IntProgram.getOpmode(99) shouldBe Opmode(99,false,false,false)
     IntProgram.getOpmode(104) shouldBe Opmode(4,true,false,false)
   }
-  // test("Test ops") {
-  //   processAdvancedOps(Seq(99), 0, Seq(1))._1 shouldBe 99
-  //   processAdvancedOps(Seq(1002,4,3,4,33), 0, Seq(1))._1 shouldBe 1002 
-  //   processAdvancedOps(Seq(1002,4,2,0,99), 0, Seq(1))._1 shouldBe 198 
-  //   // op mode 3
-  //   processAdvancedOps(Seq(3,3,99,0), 0, Seq(1))._1 shouldBe 3 
-  //   processAdvancedOps(Seq(3,0,99), 0, Seq(1))._1 shouldBe 1 
-  //   // op mode 4 - changed in Day9
-  //   processAdvancedOps(Seq(4,3,99,0), 0, Seq(1))._1 shouldBe 0
-  //   processAdvancedOps(Seq(4,5,1002,6,2,0,99), 0, Seq(1))._1 shouldBe 0
-  //   // add modes 5 6 7 8
-  //   processAdvancedOps(Seq(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99), 0, Seq(7))._1 shouldBe 999 
-  //   processAdvancedOps(Seq(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99), 0, Seq(8))._1 shouldBe 1000 
-  //   processAdvancedOps(Seq(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99), 0, Seq(9))._1 shouldBe 1001 
-  // }
+  test("Test ops") {
+    val IntProgram(o1, _, i1, _) = IntProgram(0, Seq(99), 0, Seq(1)).processAdvancedOps()
+    o1 shouldBe 99
+    i1 shouldBe 0
+
+    val IntProgram(o2, _, i2, _) = IntProgram(0, Seq(1002,4,3,4,33), 0, Seq(1)).processAdvancedOps()
+    o2 shouldBe 1002
+    i2 shouldBe 4
+    
+    val IntProgram(o3, _, i3, _) = IntProgram(0, Seq(1002,4,2,0,99), 0, Seq(1)).processAdvancedOps()
+    o3 shouldBe 198
+    i3 shouldBe 4
+    
+    // op mode 3
+    val IntProgram(o4, _, i4, _) = IntProgram(0, Seq(3,3,99,0), 0, Seq(1)).processAdvancedOps()
+    o4 shouldBe 3
+    i4 shouldBe 2
+
+    val IntProgram(o5, _, i5, _) = IntProgram(0, Seq(3,0,99), 0, Seq(1)).processAdvancedOps()
+    o5 shouldBe 1
+    i5 shouldBe 2
+
+    // op mode 4 - changed in Day9
+    val IntProgram(o6, _, i6, _) = IntProgram(0, Seq(4,3,99,0), 0, Seq(1)).processAdvancedOps()
+    o6 shouldBe 0
+    i6 shouldBe 2
+
+    val IntProgram(o7, _, i7, _) = IntProgram(0, Seq(4,5,1002,6,2,0,99), 0, Seq(1)).processAdvancedOps()
+    o7 shouldBe 0
+    i7 shouldBe 2
+
+    // add modes 5 6 7 8
+    val IntProgram(o8, _, i8, _) = IntProgram(0, Seq(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99), 0, Seq(7)).processAdvancedOps()
+    o8 shouldBe 999
+    i8 shouldBe 33
+
+    val IntProgram(o9, _, i9, _) = IntProgram(0, Seq(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99), 0, Seq(8)).processAdvancedOps()
+    o9 shouldBe 1000
+    i9 shouldBe 28
+
+    val IntProgram(o10, _, i10, _) = IntProgram(0, Seq(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99), 0, Seq(9)).processAdvancedOps()
+    o10 shouldBe 1001
+    i10 shouldBe 42
+
+  }
 
   // val input1 = Seq(3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0)
   // val input2 = Seq(3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0)
