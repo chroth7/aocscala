@@ -9,6 +9,8 @@ import operations.Day9Operations._
 final case class Opmode(code: Int, param1: Boolean, param2: Boolean, param3: Boolean) {}
 
 case class IntProgram(output: Output, program: OpProgram, index: Index, inputs: Inputs)  {
+  // overloaad
+  def this(program: OpProgram, index: Index, inputs: Inputs) = this(0, program, index, inputs)
 
   // def processAdvancedOps(seq: OpProgram, index: Int, input: Inputs): IntProgram = {
   def processAdvancedOps(): IntProgram = {
@@ -39,6 +41,9 @@ case class IntProgram(output: Output, program: OpProgram, index: Index, inputs: 
 
 // Companion
 object IntProgram {
+  // overload
+  def apply(program: OpProgram, index: Index, inputs: Inputs) = new IntProgram(program, index, inputs)
+
   def getOpmode(opcode: Int): Opmode = {
     val digitsReversed: Seq[Int] = opcode.toString.map(_.asDigit).reverse
     def safeGet(seq: Seq[Int], idx: Int): Int = if (seq.length > idx) seq(idx) else 0

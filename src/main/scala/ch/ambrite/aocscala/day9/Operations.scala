@@ -24,14 +24,14 @@ case object Day9Operations {
 
     val calc = func(param1, param2)
     val newSeq = seq.updated(pos, calc)
-    IntProgram(0, newSeq, index + shift, input).processAdvancedOps()
+    IntProgram(newSeq, index + shift, input).processAdvancedOps()
   }
 
   def processInput(intProgram: IntProgram, shift: Int): IntProgram = {
     val IntProgram(_, seq, index, input) = intProgram
     val pos = seq(index + 1)
     val newSeq = seq.updated(pos, input.head)
-    IntProgram(0, newSeq, index + shift, input.tail).processAdvancedOps()
+    IntProgram(newSeq, index + shift, input.tail).processAdvancedOps()
   }
 
   def processOutput(intProgram: IntProgram, opmode: Opmode, shift: Int): IntProgram = {
@@ -46,9 +46,9 @@ case object Day9Operations {
     val checkAgainst: Int = getValueWithMode(seq, index + 1, p1)
     val condition = predicate(checkAgainst)
     if (condition) 
-      IntProgram(0, seq, getValueWithMode(seq, index + 2, p2), input).processAdvancedOps()
+      IntProgram(seq, getValueWithMode(seq, index + 2, p2), input).processAdvancedOps()
     else 
-      IntProgram(0, seq, index + shift, input).processAdvancedOps()
+      IntProgram(seq, index + shift, input).processAdvancedOps()
   }
 
   def processSetAtPosition(seq: Seq[Int], input: Inputs, predicate: (Int, Int) => Boolean, shift: Int, p1: Boolean, p2: Boolean, index: Int): IntProgram = {
@@ -63,7 +63,7 @@ case object Day9Operations {
       0
     }
     val newSeq = seq.updated(pos, value)
-    IntProgram(0, newSeq, index + shift, input).processAdvancedOps()
+    IntProgram(newSeq, index + shift, input).processAdvancedOps()
   }
 
 }
